@@ -1,0 +1,3 @@
+Kurs: 222.60
+Tagestief: 218.50
+Tageshoch: 222.60

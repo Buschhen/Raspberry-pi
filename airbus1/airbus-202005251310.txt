@@ -1,0 +1,3 @@
+Kurs: 57.21
+Tagestief: 54.98
+Tageshoch: 57.42

@@ -9,6 +9,8 @@ from os import path
 # TODO
 # good var names
 # error checking
+# crontab
+# add fail save
 
 
 '''
@@ -17,7 +19,7 @@ For the index
 # Get the time stamp for filename and to check time
 
 
-def unixtimer():
+def timestamp():
     # format to string
     timestamp = str(datetime.now())
     timestamp = timestamp.replace(' ', '').replace(':', '').replace('-', '')
@@ -128,11 +130,13 @@ def Writeinfile(stonks, unixtime, Tagestief, Tageshoch, Kurs):
 
 def main():
     while True:
-        unixtime = unixtimer()
+        unixtime = timestamp()
         if unixtime % 10 == 0:
             urls = open("URLS.txt", "r")
             for line in urls:
                 url = line.strip()
+                # fail save
+
                 if url.find("index") > 0:
 
                     stonks = url[url.find("index") + 6:]
@@ -143,12 +147,15 @@ def main():
                         stoks = cleanupindex(url)
 
                         Kurs = Kursindex(stoks)
+                        Kurs = Kurs.replace(',', '.')
 
                         Tag = Tageswerteindex(stoks)
                         # the values have 2 decimal poinsts and are stuk together so you need to split one number in to
                         Trennwert = Tag.find(",") + 2
                         Tagestief = Tag[0: Trennwert+1]
+                        Tagestief = Tagestief.replace(',', '.')
                         Tageshoch = Tag[Trennwert + 1:]
+                        Tageshoch = Tageshoch.replace(',', '.')
 
                         if not(os.path.isdir(f"./{stonks}")):
                             os.makedirs(f"{stonks}")
@@ -162,13 +169,16 @@ def main():
                         stoks = cleanupshares(url)
 
                         Kurs = courseshares(stoks)
+                        Kurs = Kurs.replace(',', '.')
 
                         Tag = Tageswerteshares(stoks)
 
                         # the values have 2 decimal poinsts and are stuk together so you need to split one number in to
                         Trennwert = Tag.find(",") + 2
                         Tagestief = Tag[0: Trennwert+1]
+                        Tagestief = Tagestief.replace(',', '.')
                         Tageshoch = Tag[Trennwert + 1:]
+                        Tageshoch = Tageshoch.replace(',', '.')
 
                         if not(os.path.isdir(f"./{stonks}")):
                             os.makedirs(f"{stonks}")
