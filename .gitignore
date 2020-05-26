@@ -1,9 +1,5 @@
-adidas
 .venv
 .vscode
-airbus
-dax
-puma
 Backup
 rawadidas
 rawairbus
@@ -11,3 +7,5 @@ rawdax
 rawdata
 Data.py
 Data
+dax
+puma

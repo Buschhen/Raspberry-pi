@@ -17,45 +17,61 @@ plt.plot(x, x, "k-")
 plt.savefig("./bar.png")
 plt.show()
 '''
-Kurs = []
-Tagestief = []
-Tageshoch = []
-Datum = []
+
 for directory in os.listdir(f"./Data"):
+    Kurs = []
+    Tagestief = []
+    Tageshoch = []
+    Datum = []
     for stok in sorted(os.listdir(f"./Data/{directory}")):
         data = open(f"./Data/{directory}/{stok}", "r")
-        print(stok)
         timestart = stok.find("-") + 1
         timeend = stok.find(".")
-        Datumdata = float(stok[timestart:timeend])
+        Datumdata = int(stok[timestart + 6:timeend])
+        name = stok[:timestart - 1]
 
         Kursdata = data.readlines(1)
-        Kursdata = float(Kursdata[0].replace("Kurs: ", '').replace('\n', ''))
-        print(Kursdata)
+        Kursdata = Kursdata[0].replace("Kurs: ", '').replace('\n', '')
+        if len(Kursdata) == 0:
+            Kursdata = Kurs[-1]
+        else:
+            Kursdata = float(Kursdata)
 
         Tagestiefdata = data.readlines(2)
-        Tagestiefdata = float(Tagestiefdata[0].replace(
-            'Tagestief: ', '').replace('\n', ''))
+        Tagestiefdata = Tagestiefdata[0].replace(
+            'Tagestief: ', '').replace('\n', '')
+        if len(Tagestiefdata) == 0:
+            Tagestiefdata = Tagestief[-1]
+        else:
+            Tagestiefdata = float(Tagestiefdata)
+            if Tagestiefdata < 1:
+                Tagestiefdata = Tagestief[-1]
 
         Tageshochdata = data.readlines(3)
-        Tageshochdata = float(Tageshochdata[0].replace(
-            'Tageshoch: ', '').replace('\n', ''))
+        Tageshochdata = Tageshochdata[0].replace(
+            'Tageshoch: ', '').replace('\n', '')
+        if len(Tageshochdata) == 0:
+            Tageshochdata = Tageshoch[-1]
+        else:
+            Tageshochdata = float(Tageshochdata)
+            if Tageshochdata < 1:
+                Tageshochdata = Tageshoch[-1]
 
         Datum.append(Datumdata)
         Kurs.append(Kursdata)
         Tagestief.append(Tagestiefdata)
         Tageshoch.append(Tageshochdata)
 
-    # print(Datum)
-    # print(Kurs)
-    # print(Tagestief)
-    # print(Tageshoch)
+    print(Datum)
+    print(Kurs)
+    print(Tagestief)
+    print(Tageshoch)
 
     plt.ylabel('Kurs')
-    plt.xlabel('Time')
-
+    fig = plt.figure(figsize=(40, 2))
+    ax = fig.add_subplot(111)
     plt.plot(Datum, Tagestief, "r-")
     plt.plot(Datum, Kurs, "k-")
     plt.plot(Datum, Tageshoch, "g-")
-    plt.savefig(f"./{stok}.png")
+    plt.savefig(f"./{name}.png")
     # plt.show()

@@ -39,6 +39,6 @@ while True:
                 site = str(requests.get(url).content).replace(
                     '\\t', '').replace('\\n', "").replace('\\r', '')
                 rawdata = open(
-                    f"./rawdata/raw{stonks}/{stonks}-{unixtime}.html", "a")
+                    f"./rawdata/raw{stonks}/{stonks}-{unixtime}.html", "w")
                 rawdata.write(site)
                 rawdata.close()
