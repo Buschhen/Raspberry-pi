@@ -104,6 +104,18 @@ def Writeinfile(stonks, timestamp, Tagestief, Tageshoch, Kurs):
     Data.close()
 
 
+def Tageswerte(Tag):
+    Trennwert = Tag.find(",") + 2
+    Tagestiefraw = Tag[Trennwert + 1:]
+    Tagestiefraw = Tagestiefraw.replace(',', '.')
+    Tageshochraw = Tag[:Trennwert + 1]
+    Tageshochraw = Tageshochraw.replace(',', '.')
+    return Tageshochraw, Tagestiefraw
+
+
+if not (os.listdir("./rawdata")):
+    os.makedirs("./rawdata")
+
 for folder in os.listdir("./rawdata"):
     if folder != "rawdax":
         for data in os.listdir(f"./rawdata/{folder}"):
@@ -119,15 +131,14 @@ for folder in os.listdir("./rawdata"):
                     Kurs = courseshares(stoks)
                     Kurs = Kurs.replace(',', '.')
                     Tag = Tageswerteshares(stoks)
-                    Trennwert = Tag.find(",") + 2
-                    Tagestief = Tag[Trennwert + 1:]
-                    Tagestief = Tagestief.replace(',', '.')
-                    Tageshoch = Tag[:Trennwert + 1]
-                    Tageshoch = Tageshoch.replace(',', '.')
+                    Tagesresults = Tageswerte(Tag)
+                    Tageshoch = Tagesresults[0]
+                    Tagestief = Tagesresults[1]
                     if not (os.path.isdir(f"./Data")):
                         os.makedirs(f"./Data")
                     if not(os.path.isdir(f"./Data/{stonks}")):
                         os.makedirs(f"./Data/{stonks}")
+                    if not(os.path.isfile(f"./Data/{stonks}/{stonks}-{timestamp}.txt")):
                         Writeinfile(stonks, timestamp,
                                     Tagestief, Tageshoch, Kurs)
     elif folder == "rawdax":
@@ -144,14 +155,13 @@ for folder in os.listdir("./rawdata"):
                     Kurs = Kursindex(stoks)
                     Kurs = Kurs.replace(",", ".").replace('.', '', 1)
                     Tag = Tageswerteindex(stoks)
-                    Trennwert = Tag.find(",") + 2
-                    Tagestief = Tag[:Trennwert + 1]
-                    Tagestief = Tagestief.replace(',', '.').replace('.', '', 1)
-                    Tageshoch = Tag[Trennwert + 1:]
-                    Tageshoch = Tageshoch.replace(',', '.').replace('.', '', 1)
+                    Tagesresults = Tageswerte(Tag)
+                    Tageshoch = Tagesresults[0]
+                    Tagestief = Tagesresults[1]
                     if not (os.path.isdir(f"./Data")):
                         os.makedirs(f"./Data")
                     if not(os.path.isdir(f"./Data/{stonks}")):
                         os.makedirs(f"./Data/{stonks}")
-                    Writeinfile(stonks, timestamp,
-                                Tagestief, Tageshoch, Kurs)
+                    if not(os.path.isfile(f"./Data/{stonks}/{stonks}-{timestamp}.txt")):
+                        Writeinfile(stonks, timestamp,
+                                    Tagestief, Tageshoch, Kurs)
